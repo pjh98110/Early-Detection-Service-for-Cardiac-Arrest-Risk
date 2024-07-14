@@ -38,8 +38,10 @@ if "page" not in st.session_state:
 
 DATA_PATH = "./data/"
 
-df18 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018.csv')
+df1 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_1.csv', index=False)
+df2 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_2.csv', index=False)
 
+df18 = pd.concat([df1, df2], axis=1)
 
 def reset_seeds(seed):
     random.seed(seed)
