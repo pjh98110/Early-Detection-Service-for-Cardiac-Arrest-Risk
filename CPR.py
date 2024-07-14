@@ -38,8 +38,8 @@ if "page" not in st.session_state:
 
 DATA_PATH = "./data/"
 
-df1 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_1.csv', index=False)
-df2 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_2.csv', index=False)
+df1 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_1.csv')
+df2 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_2.csv')
 
 df18 = pd.concat([df1, df2], axis=1)
 
