@@ -1,0 +1,14 @@
+streamlit==1.27.2
+pandas==2.0.1
+numpy==1.23.5
+st_pages
+streamlit_extras
+streamlit_chat
+openai==0.27.0
+google-generativeai
+requests
+shap
+lime
+matplotlib
+scikit-learn
+xgboost
