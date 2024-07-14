@@ -263,7 +263,7 @@ if selected_survey == "심정지 발생 가능성 예측":
 
 
         with col2:
-            st.markdown(f"여기에는 그래프나 다른 시각화 넣기")
+            st.markdown(f"버튼은 아래에 있습니다.")
             # plt.figure(figsize=(10, 6))
             # df18["일반인 심폐소생술 시행여부_LABEL"].value_counts().plot(kind='bar')
             # plt.title('일반인 심폐소생술 시행여부 (빈도순)')
