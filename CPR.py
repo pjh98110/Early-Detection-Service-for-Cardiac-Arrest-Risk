@@ -38,7 +38,7 @@ if "page" not in st.session_state:
 
 DATA_PATH = "./data/"
 
-@st.cache_data
+@st.cache
 def load_data():
     df1 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_1.csv')
     df2 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_2.csv')
