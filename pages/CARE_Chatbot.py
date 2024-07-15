@@ -128,7 +128,7 @@ def gemini_prompt(user_input):
 
     사용자 입력: {user_input}
     """
-    return f"{base_prompt}\n사용자 입력: {user_input}"
+    return base_prompt
 
 
 # 스트림 표시 함수
