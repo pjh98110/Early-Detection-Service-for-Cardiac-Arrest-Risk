@@ -31,7 +31,6 @@ def gpt_prompt(user_input):
     <규칙>
     1) 환자의 성별, 나이, 주변 상황을 분석하여, 맞춤형 심폐소생술 가이드라인을 전달한다. 
     2) 예시를 참고하여 더 발전시킨 심폐소생술 가이드라인을 답변한다.
-    3) 심폐소생술 가이드라인은 최대한 상세하고 자세하게 작성한다.
 
     구조자의 성별은 {st.session_state.selected_gender}이며, 구조자의 나이는 {st.session_state.selected_age}이다.
     [환자의 주변 상황]은 {st.session_state.gpt_input_cpr}이며 이 정보를 바탕으로 <규칙>에 따라서 답변한다.
@@ -86,7 +85,6 @@ def gemini_prompt(user_input):
     <규칙>
     1) 환자의 성별, 나이, 주변 상황을 분석하여, 맞춤형 심폐소생술 가이드라인을 전달한다. 
     2) 예시를 참고하여 더 발전시킨 심폐소생술 가이드라인을 답변한다.
-    3) 심폐소생술 가이드라인은 최대한 상세하고 자세하게 작성한다.
 
     구조자의 성별은 {st.session_state.selected_gender}이며, 구조자의 나이는 {st.session_state.selected_age}이다.
     [환자의 주변 상황]은 {st.session_state.gemini_input_cpr}이며 이 정보를 바탕으로 <규칙>에 따라서 답변한다.
