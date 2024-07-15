@@ -262,7 +262,7 @@ if selected_survey == "심정지 발생 가능성 예측":
                 ) else 1,
                 axis=1
                 )
-            st.markdown(f"당신의 지역은 {selected_district}이며, 성별은 {selected_gender}, 나이는 {selected_age}입니다.")
+            st.markdown(f"당신의 지역은 [{selected_district}]이며, 성별은 [{selected_gender}], 나이는 [{selected_age}살]입니다.")
             st.markdown(f"현재 상태를 유지할 시, {'생존' if df18['사망여부'].sample(1).values[0] == 1 else '사망'}할 확률이 높습니다.")
             st.markdown(f"추가 정보를 원하면, 심정지위험 진단 챗봇 버튼을 클릭하세요. 챗봇 페이지로 이동합니다.")
 
@@ -339,7 +339,7 @@ if selected_survey == "GPT를 통한 심정지위험 예방":
     # 검사결과 버튼을 누를 경우
     if st.button("검사결과"):
     
-        st.markdown(f"당신의 지역은 {selected_district}이며, 성별은 {selected_gender}, 나이는 {selected_age}입니다.")
+        st.markdown(f"당신의 지역은 [{selected_district}]이며, 성별은 [{selected_gender}], 나이는 [{selected_age}살]입니다.")
         st.markdown(f"심정지위험 진단 챗봇 버튼을 클릭하세요. 입력된 정보로 챗봇이 맞춤형 분석 결과를 제공합니다.")
 
 
@@ -406,7 +406,7 @@ if selected_survey == "Gemini를 통한 심정지위험 예방":
     # 검사결과 버튼을 누를 경우
     if st.button("검사결과"):
 
-        st.markdown(f"당신의 지역은 {selected_district}이며, 성별은 {selected_gender}, 나이는 {selected_age}입니다.")
+        st.markdown(f"당신의 지역은 [{selected_district}]이며, 성별은 [{selected_gender}], 나이는 [{selected_age}살]입니다.")
         st.markdown(f"심정지위험 진단 챗봇 버튼을 클릭하세요. 입력된 정보로 챗봇이 맞춤형 분석 결과를 제공합니다.")
 
 
@@ -471,7 +471,7 @@ if selected_survey == "GPT를 통한 심폐소생술 교육":
     # 검사결과 버튼을 누를 경우
     if st.button("검사결과"):
     
-        st.markdown(f"당신의 지역은 {selected_district}이며, 성별은 {selected_gender}, 나이는 {selected_age}입니다.")
+        st.markdown(f"당신의 지역은 [{selected_district}]이며, 성별은 [{selected_gender}], 나이는 [{selected_age}살]입니다.")
         st.markdown(f"심폐소생술 교육 챗봇 버튼을 클릭하세요. 입력된 정보로 챗봇이 맞춤형 심폐소생술 가이드라인을 제공합니다.")
 
 
@@ -535,7 +535,7 @@ if selected_survey == "Gemini를 통한 심폐소생술 교육":
     # 검사결과 버튼을 누를 경우
     if st.button("검사결과"):
 
-        st.markdown(f"당신의 지역은 {selected_district}이며, 성별은 {selected_gender}, 나이는 {selected_age}입니다.")
+        st.markdown(f"당신의 지역은 [{selected_district}]이며, 성별은 [{selected_gender}], 나이는 [{selected_age}살]입니다.")
         st.markdown(f"심폐소생술 교육 챗봇 버튼을 클릭하세요. 입력된 정보로 챗봇이 맞춤형 심폐소생술 가이드라인을 제공합니다.")
 
     st.markdown(
