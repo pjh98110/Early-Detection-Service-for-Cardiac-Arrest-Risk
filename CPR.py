@@ -27,8 +27,8 @@ st.set_page_config(layout="wide")
 show_pages(
     [
         Page("CPR.py", "심정지 발생 위험 조기 진단 서비스", "👨‍⚕️"),
-        Page("pages/CARE_Chatbot.py", "심정지발생 예방 챗봇", "🤗"),
-        Page("pages/CPR_Chatbot.py", "심폐소생술 교육 챗봇", "🤗"),
+        Page("pages/CARE_Chatbot.py", "심정지발생 예방 챗봇", "💔"),
+        Page("pages/CPR_Chatbot.py", "심폐소생술 교육 챗봇", "📝"),
         Page("pages/Tableau.py", "Tableau", "🖥️"),
     ]
 )
@@ -38,10 +38,15 @@ if "page" not in st.session_state:
 
 DATA_PATH = "./data/"
 
-df1 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_1.csv')
-df2 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_2.csv')
+@st.cache_data
+def load_data():
+    df1 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_1.csv')
+    df2 = pd.read_csv(f'{DATA_PATH}급성심장정지조사_2018_2.csv')
+    df18 = pd.concat([df1, df2], axis=1)
+    return df18
 
-df18 = pd.concat([df1, df2], axis=1)
+# 데이터 불러오기
+df18 = load_data()
 
 def reset_seeds(seed):
     random.seed(seed)
@@ -230,7 +235,7 @@ if selected_survey == "심정지 발생 가능성 예측":
         # 스트리밋 클라우드 서버의 데이터 크기 제한으로 인해, 현재 웹앱에서 모델을 전체적으로 
         # 실행하는 것이 불가능합니다. 이에 따라, 웹앱에서는 모델의 결과를 예시로 보여주는 샘플데이터(25mb 이하)로 분석을 제공하며, 
         # 실제로 정확한 모델 결과를 얻고자 한다면 제출된 모델의 코드를 자신의 로컬 환경에서 실행해야 합니다.
-        # 전체적인 xgboost 모델은 제출한 코드에 있으며, 여기에는 샘플데이터 분석 결과만 있습니다.
+        # 전체적인 모델은 제출한 코드에 있으며, 여기에는 샘플데이터 분석 결과만 있습니다.
     
 
     # 검사결과 버튼을 누를 경우
@@ -258,8 +263,8 @@ if selected_survey == "심정지 발생 가능성 예측":
                 axis=1
                 )
             st.markdown(f"당신의 지역은 {selected_district}이며, 성별은 {selected_gender}, 나이는 {selected_age}입니다.")
-            st.markdown(f"사망여부 결과: {'생존' if df18['사망여부'].sample(1).values[0] == 1 else '사망'}입니다.")
-            st.markdown(f"심정지위험 진단 챗봇 버튼을 클릭하세요. 챗봇 페이지로 이동합니다.")
+            st.markdown(f"현재 상태를 유지할 시, {'생존' if df18['사망여부'].sample(1).values[0] == 1 else '사망'}할 확률이 높습니다.")
+            st.markdown(f"추가 정보를 원하면, 심정지위험 진단 챗봇 버튼을 클릭하세요. 챗봇 페이지로 이동합니다.")
 
 
         with col2:
@@ -334,8 +339,8 @@ if selected_survey == "GPT를 통한 심정지위험 예방":
     # 검사결과 버튼을 누를 경우
     if st.button("검사결과"):
     
-        st.markdown(f"당신의 지역은 {selected_district}이며, 선택한 날짜는 {selected_age}입니다.")
-        st.markdown(f"심정지위험 진단 챗봇 버튼을 클릭하세요. 챗봇 페이지로 이동합니다.")
+        st.markdown(f"당신의 지역은 {selected_district}이며, 성별은 {selected_gender}, 나이는 {selected_age}입니다.")
+        st.markdown(f"심정지위험 진단 챗봇 버튼을 클릭하세요. 입력된 정보로 챗봇이 맞춤형 분석 결과를 제공합니다.")
 
 
     st.markdown(
@@ -401,8 +406,8 @@ if selected_survey == "Gemini를 통한 심정지위험 예방":
     # 검사결과 버튼을 누를 경우
     if st.button("검사결과"):
 
-        st.markdown(f"당신의 지역은 {selected_district}이며, 선택한 날짜는 {selected_age}입니다.")
-        st.markdown(f"심정지위험 진단 챗봇 버튼을 클릭하세요. 챗봇 페이지로 이동합니다.")
+        st.markdown(f"당신의 지역은 {selected_district}이며, 성별은 {selected_gender}, 나이는 {selected_age}입니다.")
+        st.markdown(f"심정지위험 진단 챗봇 버튼을 클릭하세요. 입력된 정보로 챗봇이 맞춤형 분석 결과를 제공합니다.")
 
 
     st.markdown(
@@ -453,31 +458,21 @@ if selected_survey == "GPT를 통한 심폐소생술 교육":
 
 
     gpt_input_cpr = {
-        "심폐소생술 가능 여부" : st.selectbox("1.심정지 환자를 발견했을 때, 심폐소생술을 할 수 있습니까?", ("할 수 있다", "할 수 없다"), key="q1"),
-        "병원 도착 전 심폐소생술 시행 여부" : st.selectbox("2.병원 도착 전 심폐소생술 시행 여부", (df18["병원 도착 전 심폐소생술 시행 여부_LABEL"].value_counts().keys()),  key="q2"),
-        "병원 도착 전 자발순환 회복 여부" : st.selectbox("3.병원 도착 전 자발순환 회복 여부", (df18["병원 도착 전 자발순환 회복 여부_LABEL"].value_counts().keys()), key="q3"),
-        "병원 도착 전 급성심장정지 목격 여부" : st.selectbox("4.병원 도착 전 급성심장정지 목격 여부", (df18["병원 도착 전 급성심장정지 목격 여부_LABEL"].value_counts().keys()), key="q4"),
-        "일반인 심폐소생술 시행여부" : st.selectbox("5.일반인 심폐소생술 시행여부", (df18["일반인 심폐소생술 시행여부_LABEL"].value_counts().keys()), key="q5"),
-        "응급실 심폐소생술 시행여부" : st.selectbox("6.응급실 심폐소생술 시행여부", (df18["응급실 심폐소생술 시행여부_LABEL"].value_counts().keys()), key="q6"),
-        "응급실 심폐소생술 후 자발순환 회복 여부" : st.selectbox("7.응급실 심폐소생술 후 자발순환 회복 여부", (df18["응급실 심폐소생술 후 자발순환 회복 여부_LABEL"].value_counts().keys()), key="q7"),
-        "응급실 제세동 실시 여부" : st.selectbox("8.응급실 제세동 실시 여부", (df18["응급실 제세동 실시 여부_LABEL"].value_counts().keys()), key="q8"),
-        "과거력_고혈압" : st.selectbox("9.과거력_고혈압", (df18["과거력_고혈압_LABEL"].value_counts().keys()), key="q9"),
-        "과거력_당뇨병" : st.selectbox("10.과거력_당뇨병", (df18["과거력_당뇨병_LABEL"].value_counts().keys()), key="q10"),
-        "과거력_심장질환" : st.selectbox("11.과거력_심장질환", (df18["과거력_심장질환_LABEL"].value_counts().keys()), key="q11"),
-        "과거력_만성신장질환" : st.selectbox("12.과거력_만성신장질환", (df18["과거력_만성신장질환_LABEL"].value_counts().keys()), key="q12"),
-        "과거력_호흡기질환" : st.selectbox("13.과거력_호흡기질환", (df18["과거력_호흡기질환_LABEL"].value_counts().keys()), key="q13"),
-        "과거력_뇌졸중" : st.selectbox("14.과거력_뇌졸중", (df18["과거력_뇌졸중_LABEL"].value_counts().keys()), key="q14"),
-        "과거력_이상지질혈증" : st.selectbox("15.과거력_이상지질혈증", (df18["과거력_이상지질혈증_LABEL"].value_counts().keys()), key="q15"),
-        "음주력" : st.selectbox("16.음주력", (df18["음주력_LABEL"].value_counts().keys()), key="q16"),
-        "흡연력" : st.selectbox("17.흡연력", (df18["흡연력_LABEL"].value_counts().keys()), key="q17"),
+        "심정지 환자를 발견한 시간(분)" : st.number_input("1.심정지 환자를 발견한 시간(분)", value=0, min_value=0, max_value=60, placeholder="__분", key="q1"),
+        "심폐소생술을 시작한 시간(분)" : st.number_input("2.심폐소생술을 시작한 시간(분)", value=0, min_value=0, max_value=60, placeholder="__분", key="q2"),
+        "주변에 도움을 줄 수 있는 사람의 수" : st.number_input("3.주변에 도움을 줄 수 있는 사람의 수", value=0, min_value=0, max_value=100, placeholder="__명", key="q3"),
+        "자동심장충격기(AED) 사용 가능 여부" : st.selectbox("4.자동심장충격기(AED) 사용 가능 여부", ("예", "아니오"), key="q4"),
+        "사용자의 CPR(심폐소생술) 경험 여부" : st.selectbox("5.사용자의 CPR(심폐소생술) 경험 여부", ("예", "아니오"), key="q5"),
+        "심정지 환자의 나이" : st.selectbox("6.심정지 환자의 나이", ("성인", "어린이", "영아"), key="q6"),
+        "심정지 환자의 성별" : st.selectbox("7.심정지 환자의 성별", ("남성", "여성"), key="q7"),
     }
     st.session_state.gpt_input_cpr = gpt_input_cpr
 
     # 검사결과 버튼을 누를 경우
     if st.button("검사결과"):
     
-        st.markdown(f"당신의 지역은 {selected_district}이며, 선택한 날짜는 {selected_age}입니다.")
-        st.markdown(f"심정지위험 진단 챗봇 버튼을 클릭하세요. 챗봇 페이지로 이동합니다.")
+        st.markdown(f"당신의 지역은 {selected_district}이며, 성별은 {selected_gender}, 나이는 {selected_age}입니다.")
+        st.markdown(f"심폐소생술 교육 챗봇 버튼을 클릭하세요. 입력된 정보로 챗봇이 맞춤형 심폐소생술 가이드라인을 제공합니다.")
 
 
     st.markdown(
@@ -526,23 +521,13 @@ if selected_survey == "Gemini를 통한 심폐소생술 교육":
 
 
     gemini_input_cpr = {
-        "심폐소생술 가능 여부" : st.selectbox("1.심정지 환자를 발견했을 때, 심폐소생술을 할 수 있습니까?", ("할 수 있다", "할 수 없다"), key="q1"),
-        "병원 도착 전 심폐소생술 시행 여부" : st.selectbox("2.병원 도착 전 심폐소생술 시행 여부", (df18["병원 도착 전 심폐소생술 시행 여부_LABEL"].value_counts().keys()),  key="q2"),
-        "병원 도착 전 자발순환 회복 여부" : st.selectbox("3.병원 도착 전 자발순환 회복 여부", (df18["병원 도착 전 자발순환 회복 여부_LABEL"].value_counts().keys()), key="q3"),
-        "병원 도착 전 급성심장정지 목격 여부" : st.selectbox("4.병원 도착 전 급성심장정지 목격 여부", (df18["병원 도착 전 급성심장정지 목격 여부_LABEL"].value_counts().keys()), key="q4"),
-        "일반인 심폐소생술 시행여부" : st.selectbox("5.일반인 심폐소생술 시행여부", (df18["일반인 심폐소생술 시행여부_LABEL"].value_counts().keys()), key="q5"),
-        "응급실 심폐소생술 시행여부" : st.selectbox("6.응급실 심폐소생술 시행여부", (df18["응급실 심폐소생술 시행여부_LABEL"].value_counts().keys()), key="q6"),
-        "응급실 심폐소생술 후 자발순환 회복 여부" : st.selectbox("7.응급실 심폐소생술 후 자발순환 회복 여부", (df18["응급실 심폐소생술 후 자발순환 회복 여부_LABEL"].value_counts().keys()), key="q7"),
-        "응급실 제세동 실시 여부" : st.selectbox("8.응급실 제세동 실시 여부", (df18["응급실 제세동 실시 여부_LABEL"].value_counts().keys()), key="q8"),
-        "과거력_고혈압" : st.selectbox("9.과거력_고혈압", (df18["과거력_고혈압_LABEL"].value_counts().keys()), key="q9"),
-        "과거력_당뇨병" : st.selectbox("10.과거력_당뇨병", (df18["과거력_당뇨병_LABEL"].value_counts().keys()), key="q10"),
-        "과거력_심장질환" : st.selectbox("11.과거력_심장질환", (df18["과거력_심장질환_LABEL"].value_counts().keys()), key="q11"),
-        "과거력_만성신장질환" : st.selectbox("12.과거력_만성신장질환", (df18["과거력_만성신장질환_LABEL"].value_counts().keys()), key="q12"),
-        "과거력_호흡기질환" : st.selectbox("13.과거력_호흡기질환", (df18["과거력_호흡기질환_LABEL"].value_counts().keys()), key="q13"),
-        "과거력_뇌졸중" : st.selectbox("14.과거력_뇌졸중", (df18["과거력_뇌졸중_LABEL"].value_counts().keys()), key="q14"),
-        "과거력_이상지질혈증" : st.selectbox("15.과거력_이상지질혈증", (df18["과거력_이상지질혈증_LABEL"].value_counts().keys()), key="q15"),
-        "음주력" : st.selectbox("16.음주력", (df18["음주력_LABEL"].value_counts().keys()), key="q16"),
-        "흡연력" : st.selectbox("17.흡연력", (df18["흡연력_LABEL"].value_counts().keys()), key="q17"),
+        "심정지 환자를 발견한 시간(분)" : st.number_input("1.심정지 환자를 발견한 시간(분)", value=0, min_value=0, max_value=60, placeholder="__분", key="q1"),
+        "심폐소생술을 시작한 시간(분)" : st.number_input("2.심폐소생술을 시작한 시간(분)", value=0, min_value=0, max_value=60, placeholder="__분", key="q2"),
+        "주변에 도움을 줄 수 있는 사람의 수" : st.number_input("3.주변에 도움을 줄 수 있는 사람의 수", value=0, min_value=0, max_value=100, placeholder="__명", key="q3"),
+        "자동심장충격기(AED) 사용 가능 여부" : st.selectbox("4.자동심장충격기(AED) 사용 가능 여부", ("예", "아니오"), key="q4"),
+        "사용자의 CPR(심폐소생술) 경험 여부" : st.selectbox("5.사용자의 CPR(심폐소생술) 경험 여부", ("예", "아니오"), key="q5"),
+        "심정지 환자의 나이" : st.selectbox("6.심정지 환자의 나이", ("성인", "어린이", "영아"), key="q6"),
+        "심정지 환자의 성별" : st.selectbox("7.심정지 환자의 성별", ("남성", "여성"), key="q7"),
     }
     st.session_state.gemini_input_cpr = gemini_input_cpr
 
@@ -550,9 +535,8 @@ if selected_survey == "Gemini를 통한 심폐소생술 교육":
     # 검사결과 버튼을 누를 경우
     if st.button("검사결과"):
 
-        st.markdown(f"당신의 지역은 {selected_district}이며, 선택한 날짜는 {selected_age}입니다.")
-        st.markdown(f"심정지위험 진단 챗봇 버튼을 클릭하세요. 챗봇 페이지로 이동합니다.")
-
+        st.markdown(f"당신의 지역은 {selected_district}이며, 성별은 {selected_gender}, 나이는 {selected_age}입니다.")
+        st.markdown(f"심폐소생술 교육 챗봇 버튼을 클릭하세요. 입력된 정보로 챗봇이 맞춤형 심폐소생술 가이드라인을 제공합니다.")
 
     st.markdown(
         """
