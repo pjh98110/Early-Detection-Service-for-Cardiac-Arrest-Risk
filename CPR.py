@@ -26,7 +26,7 @@ st.set_page_config(layout="wide")
 
 show_pages(
     [
-        Page("CPR.py", "심정지 발생 위험 조기 진단 서비스", "👨‍⚕️"),
+        Page("CPR.py", "심정지 발생 시 생존여부 시뮬레이션", "👨‍⚕️"),
         Page("pages/CARE_Chatbot.py", "심정지발생 예방 챗봇", "💔"),
         Page("pages/CPR_Chatbot.py", "심폐소생술 교육 챗봇", "📝"),
         Page("pages/Tableau.py", "Tableau", "🖥️"),
@@ -165,7 +165,7 @@ if 'selected_survey' not in st.session_state:
 
 # 타이틀
 colored_header(
-    label= '심정지 발생 위험 조기 진단 서비스👨‍⚕️',
+    label= '심정지 발생 시 생존여부 시뮬레이션👨‍⚕️',
     description=None,
     color_name="green-70",
 )
@@ -201,7 +201,7 @@ st.session_state.selected_age = selected_age
 
 selected_survey = st.selectbox(
     "궁금한 검사 결과를 선택하세요.",
-    options=["심정지 발생 가능성 예측", "GPT를 통한 심정지위험 예방", "Gemini를 통한 심정지위험 예방", "GPT를 통한 심폐소생술 교육", "Gemini를 통한 심폐소생술 교육"],
+    options=["심정지 발생 시 생존여부 시뮬레이션", "GPT를 통한 심정지위험 예방", "Gemini를 통한 심정지위험 예방", "GPT를 통한 심폐소생술 교육", "Gemini를 통한 심폐소생술 교육"],
     placeholder="하나를 선택하세요.",
     help="선택한 검사에 따라 다른 분석 결과를 제공합니다."
 )
@@ -209,7 +209,7 @@ selected_survey = st.selectbox(
 st.session_state.selected_survey = selected_survey
 
 
-if selected_survey == "심정지 발생 가능성 예측":
+if selected_survey == "심정지 발생 시 생존여부 시뮬레이션":
 
     goldentime = int(st.number_input("심폐소생술을 시작한 시간을 입력하세요.", min_value=0, max_value=60, value=0, key="q0"))  
     questions = {
