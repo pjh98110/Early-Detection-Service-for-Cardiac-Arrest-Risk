@@ -140,15 +140,15 @@ def stream_display(response, placeholder):
     return text
 
 # Initialize chat history
-if "messages" not in st.session_state:
-    st.session_state.messages = {
-        "gpt": [
-            {"role": "system", "content": "GPT가 사용자에게 상황에 맞는 심폐소생술 가이드라인을 알려드립니다."}
-        ],
-        "gemini": [
-            {"role": "model", "parts": [{"text": "Gemini가 사용자에게 상황에 맞는 심폐소생술 가이드라인을 알려드립니다."}]}
-        ]
-    }
+if "gpt_messages" not in st.session_state:
+    st.session_state.gpt_messages = [
+        {"role": "system", "content": "GPT가 사용자에게 상황에 맞는 심폐소생술 가이드라인을 알려드립니다."}
+    ]
+
+if "gemini_messages" not in st.session_state:
+    st.session_state.gemini_messages = [
+        {"role": "model", "parts": [{"text": "Gemini가 사용자에게 상황에 맞는 심폐소생술 가이드라인을 알려드립니다."}]}
+    ]
 
 # 세션 변수 체크
 def check_session_vars():
@@ -177,19 +177,19 @@ if selected_chatbot == "GPT를 통한 심폐소생술 교육":
 
     # 대화 초기화 버튼
     def on_clear_chat_gpt():
-        st.session_state.messages["gpt"] = [
+        st.session_state.gpt_messages = [
             {"role": "system", "content": "GPT가 사용자에게 상황에 맞는 심폐소생술 가이드라인을 알려드립니다."}
         ]
 
     st.button("대화 초기화", on_click=on_clear_chat_gpt)
 
     # 이전 메시지 표시
-    if "gpt" not in st.session_state.messages:
-        st.session_state.messages["gpt"] = [
+    if "gpt_messages" not in st.session_state:
+        st.session_state.gpt_messages = [
             {"role": "system", "content": "GPT가 사용자에게 상황에 맞는 심폐소생술 가이드라인을 알려드립니다."}
         ]
         
-    for msg in st.session_state.messages["gpt"]:
+    for msg in st.session_state.gpt_messages:
         role = 'user' if msg['role'] == 'user' else 'assistant'
         with st.chat_message(role):
             st.write(msg['content'])
@@ -197,7 +197,7 @@ if selected_chatbot == "GPT를 통한 심폐소생술 교육":
     # 사용자 입력 처리
     if prompt := st.chat_input("챗봇과 대화하기:"):
         # 사용자 메시지 추가
-        st.session_state.messages["gpt"].append({"role": "user", "content": prompt})
+        st.session_state.gpt_messages.append({"role": "user", "content": prompt})
         with st.chat_message('user'):
             st.write(prompt)
 
@@ -210,7 +210,7 @@ if selected_chatbot == "GPT를 통한 심폐소생술 교육":
                 model="gpt-4o",
                 messages=[
                     {"role": "system", "content": enhanced_prompt}
-                ] + st.session_state.messages["gpt"],
+                ] + st.session_state.gpt_messages,
                 max_tokens=1500,
                 temperature=0.8,
                 top_p=1.0,
@@ -220,7 +220,7 @@ if selected_chatbot == "GPT를 통한 심폐소생술 교육":
             text = response.choices[0]['message']['content']
 
             # 응답 메시지 표시 및 저장
-            st.session_state.messages["gpt"].append({"role": "assistant", "content": text})
+            st.session_state.gpt_messages.append({"role": "assistant", "content": text})
             with st.chat_message("assistant"):
                 st.write(text)
         except Exception as e:
@@ -248,16 +248,16 @@ elif selected_chatbot == "Gemini를 통한 심폐소생술 교육":
         top_p = st.slider("Top P", min_value=0.0, max_value=1.0, value=0.95, help="다음 단어를 선택할 때 고려할 후보 단어의 누적 확률을 설정합니다.")
 
     st.button("대화 초기화", on_click=lambda: st.session_state.update({
-        "messages": {"gemini": [{"role": "model", "parts": [{"text": "Gemini가 사용자에게 상황에 맞는 심폐소생술 가이드라인을 알려드립니다."}]}]}
+        "gemini_messages": [{"role": "model", "parts": [{"text": "Gemini가 사용자에게 상황에 맞는 심폐소생술 가이드라인을 알려드립니다."}]}]
     }))
 
     # 이전 메시지 표시
-    if "gemini" not in st.session_state.messages:
-        st.session_state.messages["gemini"] = [
+    if "gemini_messages" not in st.session_state:
+        st.session_state.gemini_messages = [
             {"role": "model", "parts": [{"text": "Gemini가 사용자에게 상황에 맞는 심폐소생술 가이드라인을 알려드립니다."}]}
         ]
         
-    for msg in st.session_state.messages["gemini"]:
+    for msg in st.session_state.gemini_messages:
         role = 'human' if msg['role'] == 'user' else 'ai'
         with st.chat_message(role):
             st.write(msg['parts'][0]['text'] if 'parts' in msg and 'text' in msg['parts'][0] else '')
@@ -265,7 +265,7 @@ elif selected_chatbot == "Gemini를 통한 심폐소생술 교육":
     # 사용자 입력 처리
     if prompt := st.chat_input("챗봇과 대화하기:"):
         # 사용자 메시지 추가
-        st.session_state.messages["gemini"].append({"role": "user", "parts": [{"text": prompt}]})
+        st.session_state.gemini_messages.append({"role": "user", "parts": [{"text": prompt}]})
         with st.chat_message('human'):
             st.write(prompt)
 
@@ -282,7 +282,7 @@ elif selected_chatbot == "Gemini를 통한 심폐소생술 교육":
                 "top_p": top_p
             }
             model = genai.GenerativeModel(model_name=model_name, generation_config=generation_config)
-            chat = model.start_chat(history=st.session_state.messages["gemini"])
+            chat = model.start_chat(history=st.session_state.gemini_messages)
             response = chat.send_message(enhanced_prompt, stream=True)
 
             with st.chat_message("ai"):
@@ -298,6 +298,6 @@ elif selected_chatbot == "Gemini를 통한 심폐소생술 교육":
             placeholder.write(text)
 
             # 응답 메시지 표시 및 저장
-            st.session_state.messages["gemini"].append({"role": "model", "parts": [{"text": text}]})
+            st.session_state.gemini_messages.append({"role": "model", "parts": [{"text": text}]})
         except Exception as e:
             st.error(f"Gemini API 요청 중 오류가 발생했습니다: {str(e)}")
