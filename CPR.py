@@ -46,7 +46,7 @@ def load_data():
     return df18
 
 # 데이터 불러오기
-df18 = load_data()
+df18 = load_data().copy()
 
 def reset_seeds(seed):
     random.seed(seed)
