@@ -245,13 +245,17 @@ if selected_survey == "심정지 발생 가능성 예측":
         with col1:
             # 골든타임에 따라 이미지 표시
             if 0 <= goldentime <= 4:
-                st.image('./data/안전.png' , width=200)
+                st.image('./data/안전.png', width=200)
+                st.write("심폐소생술을 시작한 결과, 환자의 골든타임은 **안전**입니다.")
             elif 4 < goldentime <= 6:
                 st.image('./data/주의.png', width=200)
+                st.write("심폐소생술을 시작한 결과, 환자의 골든타임은 **주의**입니다.")
             elif 6 < goldentime <= 10:
                 st.image('./data/위험.png', width=200)
+                st.write("심폐소생술을 시작한 결과, 환자의 골든타임은 **위험**입니다.")
             elif goldentime > 10:
                 st.image('./data/고위험.png', width=200)
+                st.write("심폐소생술을 시작한 결과, 환자의 골든타임은 **고위험**입니다.")
 
             df18['사망여부'] = df18.apply(
                 lambda row: 0 if (
@@ -262,20 +266,12 @@ if selected_survey == "심정지 발생 가능성 예측":
                 ) else 1,
                 axis=1
                 )
-            st.markdown(f"당신의 지역은 [{selected_district}]이며, 성별은 [{selected_gender}], 나이는 [{selected_age}살]입니다.")
-            st.markdown(f"현재 상태를 유지할 시, {'생존' if df18['사망여부'].sample(1).values[0] == 1 else '사망'}할 확률이 높습니다.")
-            st.markdown(f"추가 정보를 원하면, 심정지위험 진단 챗봇 버튼을 클릭하세요. 챗봇 페이지로 이동합니다.")
 
 
         with col2:
-            st.markdown(f"버튼은 아래에 있습니다.")
-            # plt.figure(figsize=(10, 6))
-            # df18["일반인 심폐소생술 시행여부_LABEL"].value_counts().plot(kind='bar')
-            # plt.title('일반인 심폐소생술 시행여부 (빈도순)')
-            # plt.xlabel('일반인 심폐소생술 시행여부')
-            # plt.ylabel('빈도')
-            # plt.show()
-
+            st.markdown(f"당신의 지역은 [{selected_district}]이며, 성별은 [{selected_gender}], 나이는 [{selected_age}살]입니다.")
+            st.markdown(f"현재 상태를 유지할 시, {'생존' if df18['사망여부'].sample(1).values[0] == 1 else '사망'}할 확률이 높습니다.")
+            st.markdown(f"추가 정보를 원하면, 심정지위험 진단 챗봇 버튼을 클릭하세요. 챗봇 페이지로 이동합니다.")
 
 
 
