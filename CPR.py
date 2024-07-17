@@ -174,7 +174,7 @@ colored_header(
 st.sidebar.markdown(f"""
             <span style='font-size: 20px;'>
             <div style=" color: #000000;">
-                <strong>지역 및 날짜 선택</strong>
+                <strong>사용자 정보 입력</strong>
             </div>
             """, unsafe_allow_html=True)
 
