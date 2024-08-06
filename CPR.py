@@ -24,14 +24,38 @@ import pickle
 # 페이지 구성 설정
 st.set_page_config(layout="wide")
 
-show_pages(
-    [
-        Page("CPR.py", "심정지 발생 시 생존여부 시뮬레이션", "👨‍⚕️"),
-        Page("pages/CARE_Chatbot.py", "심정지발생 예방 챗봇", "💔"),
-        Page("pages/CPR_Chatbot.py", "심폐소생술 교육 챗봇", "📝"),
-        Page("pages/Tableau.py", "Tableau", "🖥️"),
-    ]
-)
+
+# 페이지 전환을 위한 함수
+def switch_page(page_name):
+    st.session_state["current_page"] = page_name
+
+# 초기 페이지 설정
+if "current_page" not in st.session_state:
+    st.session_state["current_page"] = "심정지 발생 시 생존여부 시뮬레이션"
+
+# 페이지 함수 정의
+def page_home():
+    st.write("심정지 발생 시 생존여부 시뮬레이션")
+
+def page_care_chatbot():
+    st.write("심정지발생 예방 챗봇")
+
+def page_cpr_chatbot():
+    st.write("심폐소생술 교육 챗봇")
+
+def page_tableau():
+    st.write("Tableau")
+
+
+
+# show_pages(
+#     [
+#         Page("CPR.py", "심정지 발생 시 생존여부 시뮬레이션", "👨‍⚕️"),
+#         Page("pages/CARE_Chatbot.py", "심정지발생 예방 챗봇", "💔"),
+#         Page("pages/CPR_Chatbot.py", "심폐소생술 교육 챗봇", "📝"),
+#         Page("pages/Tableau.py", "Tableau", "🖥️"),
+#     ]
+# )
 
 if "page" not in st.session_state:
     st.session_state.page = "CPR"
@@ -293,13 +317,13 @@ if selected_survey == "심정지 발생 시 생존여부 시뮬레이션":
         want_to_CARE_Chatbot = st.button("심정지발생 예방 챗봇")
         if want_to_CARE_Chatbot:
             st.session_state.type_of_case = "CARE_Chatbot"
-            switch_page("심정지발생 예방 챗봇")
+            switch_page("CARE_Chatbot")
             
     def page2():
         want_to_CPR_Chatbot = st.button("심폐소생술 교육 챗봇")
         if want_to_CPR_Chatbot:
             st.session_state.type_of_case = "CPR_Chatbot"
-            switch_page("심폐소생술 교육 챗봇")            
+            switch_page("CPR_Chatbot")            
 
     def page3():
         want_to_Tableau = st.button("Tableau")
@@ -358,13 +382,13 @@ if selected_survey == "GPT를 통한 심정지위험 예방":
         want_to_CARE_Chatbot = st.button("심정지발생 예방 챗봇")
         if want_to_CARE_Chatbot:
             st.session_state.type_of_case = "CARE_Chatbot"
-            switch_page("심정지발생 예방 챗봇")
+            switch_page("CARE_Chatbot")
             
     def page2():
         want_to_CPR_Chatbot = st.button("심폐소생술 교육 챗봇")
         if want_to_CPR_Chatbot:
             st.session_state.type_of_case = "CPR_Chatbot"
-            switch_page("심폐소생술 교육 챗봇")            
+            switch_page("CPR_Chatbot")            
 
     def page3():
         want_to_Tableau = st.button("Tableau")
@@ -425,13 +449,13 @@ if selected_survey == "Gemini를 통한 심정지위험 예방":
         want_to_CARE_Chatbot = st.button("심정지발생 예방 챗봇")
         if want_to_CARE_Chatbot:
             st.session_state.type_of_case = "CARE_Chatbot"
-            switch_page("심정지발생 예방 챗봇")
+            switch_page("CARE_Chatbot")
             
     def page2():
         want_to_CPR_Chatbot = st.button("심폐소생술 교육 챗봇")
         if want_to_CPR_Chatbot:
             st.session_state.type_of_case = "CPR_Chatbot"
-            switch_page("심폐소생술 교육 챗봇")            
+            switch_page("CPR_Chatbot")            
 
     def page3():
         want_to_Tableau = st.button("Tableau")
@@ -490,13 +514,13 @@ if selected_survey == "GPT를 통한 심폐소생술 교육":
         want_to_CARE_Chatbot = st.button("심정지발생 예방 챗봇")
         if want_to_CARE_Chatbot:
             st.session_state.type_of_case = "CARE_Chatbot"
-            switch_page("심정지발생 예방 챗봇")
+            switch_page("CARE_Chatbot")
             
     def page2():
         want_to_CPR_Chatbot = st.button("심폐소생술 교육 챗봇")
         if want_to_CPR_Chatbot:
             st.session_state.type_of_case = "CPR_Chatbot"
-            switch_page("심폐소생술 교육 챗봇")            
+            switch_page("CPR_Chatbot")            
 
     def page3():
         want_to_Tableau = st.button("Tableau")
@@ -553,13 +577,13 @@ if selected_survey == "Gemini를 통한 심폐소생술 교육":
         want_to_CARE_Chatbot = st.button("심정지발생 예방 챗봇")
         if want_to_CARE_Chatbot:
             st.session_state.type_of_case = "CARE_Chatbot"
-            switch_page("심정지발생 예방 챗봇")
+            switch_page("CARE_Chatbot")
             
     def page2():
         want_to_CPR_Chatbot = st.button("심폐소생술 교육 챗봇")
         if want_to_CPR_Chatbot:
             st.session_state.type_of_case = "CPR_Chatbot"
-            switch_page("심폐소생술 교육 챗봇")            
+            switch_page("CPR_Chatbot")            
 
     def page3():
         want_to_Tableau = st.button("Tableau")
