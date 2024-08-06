@@ -25,29 +25,6 @@ import pickle
 st.set_page_config(layout="wide")
 
 
-# # 페이지 전환을 위한 함수
-# def switch_page(page_name):
-#     st.session_state["current_page"] = page_name
-
-# # 초기 페이지 설정
-# if "current_page" not in st.session_state:
-#     st.session_state["current_page"] = "심정지 발생 시 생존여부 시뮬레이션"
-
-# # 페이지 함수 정의
-# def page_home():
-#     st.write("심정지 발생 시 생존여부 시뮬레이션")
-
-# def page_care_chatbot():
-#     st.write("심정지발생 예방 챗봇")
-
-# def page_cpr_chatbot():
-#     st.write("심폐소생술 교육 챗봇")
-
-# def page_tableau():
-#     st.write("Tableau")
-
-
-
 show_pages(
     [
         Page("CPR.py", "심정지 발생 시 생존여부 시뮬레이션", "👨‍⚕️"),
